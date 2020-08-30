@@ -1,0 +1,20 @@
+{
+	"name": "browser-sync-console",
+	"version": "1.0.0",
+	"description": "Messages from console to terminal",
+	"main": "plugin.js",
+	"dependencies": {
+		"browser-sync": "^2.26.12",
+		"eazy-logger": "^2.1.3"
+	},
+	"keywords": [
+		"browser-sync", "plugin", "console", "log"
+	],
+	"repository": "https://github.com/alex2844/browser-sync-console.git",
+	"author": {
+		"name": "Alex Smith",
+		"email": "alex.smith2844@gmail.com",
+		"website": "https://me.qwedl.com/",
+		"github": "https://github.com/alex2844"
+	}
+}
