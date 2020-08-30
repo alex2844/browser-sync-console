@@ -42,12 +42,12 @@ module.exports.hooks = {
 		}
 		console.log = function() {
 			 ___browserSync___.socket.emit('console:log', args2arr(arguments));
-			client.log.apply(console, arguments);
+			client.log.apply(client, arguments);
 		}
 		console.error = function() {
 			console.warn('console:log', args2arr(arguments));
 			 ___browserSync___.socket.emit('console:error', args2arr(arguments));
-			client.error.apply(console, arguments);
+			client.error.apply(client, arguments);
 		}
 	}).toString()+')(console);'
 }
