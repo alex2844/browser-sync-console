@@ -1,15 +1,11 @@
 const
 	browserSync = require('browser-sync'),
-	logger = require('eazy-logger');
+	logger = require('eazy-logger').Logger({ useLevelPrefixes: true });
 
-module.exports.plugin = (server, client, bs) => {
-	let logger2info = logger.Logger({ prefix:'[{blue:INFO}] ' }),
-		logger2error = logger.Logger({ prefix:'[{red:ERROR}] ' });
-	client.io.sockets.on('connect', client => {
-		client.on('console:log', args => logger2info.info.apply(logger2info, args));
-		client.on('console:error', args => logger2error.error.apply(logger2error, args));
-	});
-}
+module.exports.plugin = (server, client, bs) => client.io.sockets.on('connect', client => {
+	client.on('console:log', args => logger.info.apply(logger, args));
+	client.on('console:error', args => logger.error.apply(logger, args));
+});
 module.exports.hooks = {
 	'client:js': '('+(function(console) {
 		var client = {
@@ -38,10 +34,10 @@ module.exports.hooks = {
 			for (var l=args.length, a=new Array(l), k=0; k<l; ++k) {
 				if ((a[k] = args[k]) instanceof HTMLElement)
 					a[k] = selector(a[k]);
-				else if ((k == 0) && !(a[0] instanceof String))
-					a.unshift('');
 			};
-			a.push(new Error().stack.split('\n')[2].trim());
+			if (!(a[0] instanceof String))
+				a.unshift('');
+			a.push(new Error().stack.split('\n').slice(3).join('\n').trim());
 			return a;
 		}
 		console.log = function() {
@@ -49,6 +45,7 @@ module.exports.hooks = {
 			client.log.apply(console, arguments);
 		}
 		console.error = function() {
+			console.warn('console:log', args2arr(arguments));
 			 ___browserSync___.socket.emit('console:error', args2arr(arguments));
 			client.error.apply(console, arguments);
 		}
